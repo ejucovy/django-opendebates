@@ -47,7 +47,7 @@
   backup_key_fingerprint:
   vcs_cmd: git # or hg
   latest_changeset_cmd: git rev-parse HEAD # hg id -i # or git rev-parse HEAD
-  repo: git@github.com:caktus/django-opendebates.git
+  repo: git://github.com/ejucovy/django-opendebates.git
 # Mapping of Fabric deployments and environments to the branch names
 # that should be deployed.
   branches:
@@ -62,7 +62,7 @@
     florida: False
     # "testing" is the upcoming production site, hide it until ready to unveil
     testing: True
-    staging: False
+    staging: True
 
 # Local server port for pgbouncer
   pgbouncer_port: 5432
