@@ -139,7 +139,8 @@ def home(request):
     merge_flags = Flag.objects.exclude(duplicate_of=None) \
                               .exclude(reviewed=True) \
                               .exclude(duplicate_of__moderated_removal=True) \
-                              .exclude(to_remove__moderated_removal=True)
+                              .exclude(to_remove__moderated_removal=True) \
+                              .select_related("to_remove", "duplicate_of")
 
     return {
         'flagged_for_removal': flagged_for_removal,

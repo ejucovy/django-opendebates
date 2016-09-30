@@ -30,7 +30,7 @@
               {{ idea.idea }}
             </td>
             <td>{{ idea.votes }}</td>
-            <td>{{ idea.removal_flags.count }}</td>
+            <td>{{ idea.num_flags }}</td>
             <td>
               <form action="{% url 'moderation_preview' %}" method="POST">
                 {% csrf_token %}
