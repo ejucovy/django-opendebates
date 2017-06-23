@@ -51,6 +51,13 @@ class SiteMode(CachingMixin, models.Model):
         default=make_aware(datetime.datetime.fromtimestamp(0)),
         unique=True)
 
+    defer_to_past = models.TextField(default=u"")
+
+    def fields_to_defer_to_past(self):
+        fields = self.defer_to_past.split(",")
+        available_fields = [field.name for field in SiteMode._meta.get_fields()]
+        return [field for field in fields if field in available_fields]
+
     show_question_votes = models.BooleanField(default=True, blank=True)
     show_total_votes = models.BooleanField(default=True, blank=True)
     allow_sorting_by_votes = models.BooleanField(default=True, blank=True)

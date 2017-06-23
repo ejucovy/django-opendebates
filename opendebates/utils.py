@@ -138,14 +138,25 @@ def sort_list(citations_only, sort, ideas):
 
 def get_site_mode():
     current_time = now()
-    try:
-        return SiteMode.objects.filter(
-            effective_after__lt=current_time).order_by("-effective_after")[0]
-    except IndexError:
+    modes = list(SiteMode.objects.filter(
+        effective_after__lt=current_time).order_by("-effective_after"))
+    if len(modes) == 0:
         with readwrite_db():
             return SiteMode.objects.get_or_create(
                 effective_after__lt=current_time)[0]
+    current_mode = modes[0]
+    return current_mode
+    field_overrides = {}
 
+    for field in current_mode.fields_to_defer_to_past():
+        for past_mode in modes[1:]:
+            if field not in past_mode.fields_to_defer_to_past():
+                field_overrides[field] = getattr(past_mode, field)
+                break
+    for field in current_mode.fields_to_defer_to_past():
+        assert field in field_overrides
+        setattr(current_mode, field, field_overrides[field])
+    return current_mode
 
 def allow_sorting_by_votes():
     return get_site_mode().allow_sorting_by_votes
